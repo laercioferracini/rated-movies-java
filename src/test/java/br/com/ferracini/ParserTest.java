@@ -24,7 +24,7 @@ class ParserTest {
 
     @ParameterizedTest(name = "Checking list of Field: {0}")
     @MethodSource(value = "fieldsList")
-    void titleListTest(String field) throws IOException {
+    void extractFieldList(String field) throws IOException {
         var file = Path.of("response.json");
         var json = Files.readAllLines(file);
         var parser = new Parser();
@@ -37,4 +37,16 @@ class ParserTest {
         );
     }
 
+    @Test
+    void moviesJson() throws IOException, ParserRuntimeException {
+        var file = Path.of("response.json");
+        var json = Files.readAllLines(file);
+        var parser = new Parser();
+
+        var movieList = parser.moviesJson(json.get(0));
+        assertAll("Assering movie list: ",
+                () -> assertFalse(movieList.isEmpty(), "Movie List is empty"),
+                () -> assertEquals(250, movieList.size(), "Movie List size is incorrect")
+        );
+    }
 }
